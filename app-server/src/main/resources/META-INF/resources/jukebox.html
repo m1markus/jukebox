@@ -2,18 +2,32 @@
 <html>
 
 <head>
-  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 
-  <style>
+    <style>
 
-/*
-    html {
-      overscroll-behavior: contain;
+    /* https://css-tricks.com/how-to-create-neon-text-with-css/
+     */
+    .neonText {
+        color: #fff;
+        text-shadow:
+            0 0 7px #fff,
+            0 0 10px #fff,
+            0 0 21px #fff,
+            0 0 42px #0fa,
+            0 0 82px #0fa,
+            0 0 92px #0fa,
+            0 0 102px #0fa,
+            0 0 151px #0fa;
     }
-*/
+
+    .textVersion {
+        color: rgba(9,87,121,1)
+    }
+
     .mainwin {
       /* from: https://cssgradient.io/
        */
@@ -34,81 +48,87 @@
       color: red;
     }
 
-  </style>
-  <!--
-    <v-main style="background: Coral" class="">
-  -->
+    </style>
+    <!--
+      <v-main style="background: Coral" class="">
+    -->
 </head>
 
 <body>
-  <div id="app">
+<div id="app">
     <v-app>
-      <v-main class="mainwin">
-        <v-container class="white--text">{{pageTitle}}</v-container>
-        
-        <!--
-        <v-container>
-          <v-btn v-on:click="myMethod" color="teal darken-4">Play</v-btn>
-        </v-container> -->
+        <v-main class="mainwin">
+            <v-container class="white--text">
+                <v-layout justify-center>
+                    <span class="neonText">{{pageTitle}}</span>
+                    &nbsp;&nbsp;&nbsp;
+                    <span class="textVersion">{{appVersion}}</span>
+                </v-layout>
+            </v-container>
 
-        <!--
-        <iframe width="640" height="360" 
-          src="https://www.youtube.com/embed/XXYlFuWEuKI?autoplay=1"
-          allow="autoplay">
-        </iframe> -->
+            <!--
+            <v-container>
+              <v-btn v-on:click="myMethod" color="teal darken-4">Play</v-btn>
+            </v-container> -->
 
-        <div id="ytplayer"></div>
+            <!--
+            <iframe width="640" height="360"
+              src="https://www.youtube.com/embed/XXYlFuWEuKI?autoplay=1"
+              allow="autoplay">
+            </iframe> -->
 
-        <v-container>
-          <!--
-          <v-list class="bgtransparent" two-line> -->
-          <v-list class="overflow-y-auto bgtransparent" max-height="350">
-            <v-list-item-group
-              active-class="blue--text"
-            >
-              <template v-for="(item, index) in playlist.items">
-                <v-list-item :key="item.message" @click="onSelectSong(item)">
-                  <template v-slot:default="{ active }">
-                    <v-list-item-content>
-                      <v-list-item-title v-text="item.title"></v-list-item-title>
-      
-                      <v-list-item-subtitle
-                        class="text--primary"
-                        v-text="item.headline"
-                      ></v-list-item-subtitle>
-      
-                      <v-list-item-subtitle v-text="item.interpret"></v-list-item-subtitle>
-                    </v-list-item-content>
-      
-                    <v-list-item-action>
-                      <v-list-item-action-text v-text="item.action"></v-list-item-action-text>
-                    </v-list-item-action>
-                  </template>
-                </v-list-item>
-      
-                <v-divider
-                  v-if="index < playlist.items.length - 1"
-                  :key="index"
-                ></v-divider>
-              </template>
-            </v-list-item-group>
-          </v-list>
-        </v-container>
+            <div id="ytplayer"></div>
 
-      </v-main>
+            <v-container>
+                <!--
+                <v-list class="bgtransparent" two-line> -->
+                <v-list class="overflow-y-auto bgtransparent" max-height="350">
+                    <v-list-item-group
+                            active-class="blue--text"
+                    >
+                        <template v-for="(item, index) in playlist.items">
+                            <v-list-item :key="item.message" @click="onSelectSong(item)">
+                                <template v-slot:default="{ active }">
+                                    <v-list-item-content>
+                                        <v-list-item-title v-text="item.title"></v-list-item-title>
+
+                                        <v-list-item-subtitle
+                                                class="text--primary"
+                                                v-text="item.headline"
+                                        ></v-list-item-subtitle>
+
+                                        <v-list-item-subtitle v-text="item.interpret"></v-list-item-subtitle>
+                                    </v-list-item-content>
+
+                                    <v-list-item-action>
+                                        <v-list-item-action-text v-text="item.action"></v-list-item-action-text>
+                                    </v-list-item-action>
+                                </template>
+                            </v-list-item>
+
+                            <v-divider
+                                    v-if="index < playlist.items.length - 1"
+                                    :key="index"
+                            ></v-divider>
+                        </template>
+                    </v-list-item-group>
+                </v-list>
+            </v-container>
+
+        </v-main>
     </v-app>
 
-  </div>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-  <script src="//unpkg.com/prevent-pull-refresh"></script>
-  <script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<script src="//unpkg.com/prevent-pull-refresh"></script>
+<script>
 
     var player;
     var actualVideoId;
 
-    function calculateRatioHeight(width){ return Math.round((width/16)*9); }
+    function calculateRatioHeight(width) { return Math.round((width/16)*9); }
 
     function onYouTubePlayerAPIReady() {
 
@@ -128,7 +148,7 @@
         */
         height: ytPlayerHeight,
         width: ytPlayerWidth,
-        /* videoId: 'XXYlFuWEuKI', */
+        videoId: 'XXYlFuWEuKI',
         events: {
           'onReady': onYouTubePlayerReady,
         },
@@ -153,7 +173,8 @@
 
     new Vue({
       data: { 
-        pageTitle: 'JukeBOX-v0.0.26',
+        pageTitle: 'JukeBOX',
+        appVersion: '0.0.30',
         playlist: {
           items: [
 
@@ -194,6 +215,31 @@
             { title: 'Move in the Right Direction', interpret: 'Gossip', id: '12zPU-8bsTE' },
 
             { title: 'Prayer In C', interpret: 'Lilly Wood & The Prick and Robin Schulz', id: 'fiore9Z5iUg' },
+
+            { title: 'Wrecked', interpret: 'Imagine Dragons', id: 'Y2NkuFIlLEo' },
+
+            { title: 'Little Bit of Love', interpret: 'Tom Grennan', id: 'SsdkvYdSzlg' },
+
+            { title: 'Cover Me In Sunshine', interpret: 'P!nk, Willow Sage Hart', id: 'vGZhMIXH62M' },
+
+            { title: 'Dance Monkey', interpret: 'Tones and I', id: 'q0hyYWKXF0Q' },
+
+            { title: 'Without You', interpret: 'The Kid LAROI', id: 'SJOKlqJho8U' },
+
+            { title: 'GOOSEBUMPS', interpret: 'HVME', id: 'W5b-a8Nzmag' },
+
+            { title: 'Good Without', interpret: 'Mimi Webb', id: 'WLoWBe9BRP4' },
+
+            { title: 'Head Shoulders Knees & Toes', interpret: 'Ofenbach & Quarterhead', id: 'pqLqag3WI5o' },
+
+            { title: 'Girls Like Us', interpret: 'Zoe Wees', id: 'ao4giEvkV0U' },
+
+            { title: 'Love Not War', interpret: 'Jason Derulo x Nuka', id: 'fZMRc-UyPm0' },
+
+            { title: 'Treppenhaus', interpret: 'LEA', id: 'DnXW8a8GEvU' },
+
+            { title: 'Poker Face', interpret: 'Lady Gaga', id: 'bESGLojNYSo' },
+
           ]
         },
       },
@@ -266,7 +312,8 @@
         },
       }),
     }).$mount('#app')
-  </script>
+
+</script>
 </body>
 
 </html>
