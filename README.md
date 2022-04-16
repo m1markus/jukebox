@@ -8,3 +8,7 @@ mvn clean install
 
 ## Build Android App
 Use 'Android Studio' to build and deploy (over WiFi).
+
+### Icon generator
+https://appicon.co/
+
