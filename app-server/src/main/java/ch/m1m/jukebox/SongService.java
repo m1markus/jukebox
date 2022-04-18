@@ -28,24 +28,6 @@ public class SongService {
         return songList;
     }
 
-    public void insert(Song song) {
-        LOG.info("try to insert new song: " + song.toString());
-
-        try {
-            Connection con = defaultDataSource.getConnection();
-
-            PreparedStatement stmt = con.prepareStatement("INSERT INTO song(id, interpret, title) VALUES(?, ?, ?)");
-            stmt.setString(1, song.getId());
-            stmt.setString(2, song.getId());
-            stmt.setString(3, song.getTitle());
-
-            int numRecs = stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public List<Song> getDummySongList() {
         List<Song> songList = new ArrayList<Song>();
         songList.add(new Song("123", "MC Markus", "Everything I can say"));
@@ -72,12 +54,19 @@ public class SongService {
             rs.close();
             stmt.close();
 
-            //throw new RuntimeException("my db error");
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return songList;
     }
+
+    // st.executeUpdate("insert into survey (id,name ) values (2,null)");
+
+    /*
+    PreparedStatement ps=con.prepareStatement("insert into emp130 values(?,?)");
+    ps.setInt(1,id);
+    ps.setString(2,name);
+    int i=ps.executeUpdate();
+    */
 }
