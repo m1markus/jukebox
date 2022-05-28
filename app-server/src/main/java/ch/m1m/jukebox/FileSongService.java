@@ -3,12 +3,14 @@ package ch.m1m.jukebox;
 import ch.m1m.jukebox.model.db.Song;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import io.agroal.api.AgroalDataSource;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.IOException;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -28,9 +30,11 @@ import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 @ApplicationScoped
 public class FileSongService {
 
+    public static String SONGS_FILE_NAME_JSON = "songs.json";
+
     private static final Logger LOG = Logger.getLogger(FileSongService.class);
 
-    public List<Song> getSongList() {
+    public List<Song> getAll() throws IOException {
         LOG.info("called getSongList()");
         List<Song> songList = readAllFrom();
         LOG.info("return song list: " + songList.toString());
@@ -56,8 +60,12 @@ public class FileSongService {
         return songList;
     }
 
-    private List<Song> readAllFrom() {
-        List<Song> songList = new ArrayList<Song>();
+    private List<Song> readAllFrom() throws IOException {
+        Gson gson = new Gson();
+        Reader reader = Files.newBufferedReader(Paths.get("/tmp/" + SONGS_FILE_NAME_JSON));
+
+        List<Song> songList = new Gson().fromJson(reader, new TypeToken<List<Song>>() {}.getType());
+        reader.close();
 
         return songList;
     }

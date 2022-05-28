@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.util.List;
 
 @Path("/api/v1/song")
@@ -16,22 +17,21 @@ public class SongResource {
     @Inject
     FileSongService songService;
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Song> getAllSongList() {
-        //return songService.getSongList();
-        return songService.getDummySongList();
-    }
-
     @Inject
     FileUploadService fileUploadService;
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Song> getAll() throws IOException {
+        return songService.getAll();
+    }
+
     // from: https://www.knowledgefactory.net/2021/10/quarkus-file-upload-example.html
     //
-    // upload with: curl -v -F 'file=@./song.json' http://localhost:8080/api/v1/song/upload
+    // upload with: curl -v -F 'file=@./songs.json' http://localhost:8080/api/v1/song/upload
     //
     @POST
-    @Path("/upload")
+    @Path("upload")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.TEXT_PLAIN)
     public Response fileUpload(@MultipartForm MultipartFormDataInput input) {
@@ -39,13 +39,13 @@ public class SongResource {
                 entity(fileUploadService.uploadFile(input)).build();
     }
 
-    @Path("x")
+    @Path("download")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllSongListDownload() {
-        List<Song> allSongs = songService.getDummySongList();
+    public Response getAllSongListDownload() throws IOException {
+        List<Song> allSongs = songService.getAll();
         return Response.ok(allSongs, MediaType.APPLICATION_JSON_TYPE)
-                .header("Content-Disposition", "attachment; filename=\"filename.json\"")
+                .header("Content-Disposition", "attachment; filename=\"x-songs.json\"")
                 .build();
     }
 

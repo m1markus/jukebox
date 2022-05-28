@@ -25,7 +25,6 @@ public class FileUploadService {
 
     public String uploadFile(MultipartFormDataInput input) {
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
-        List<String> fileNames = new ArrayList<>();
         List<InputPart> inputParts = uploadForm.get("file");
         String fileName = null;
         for (InputPart inputPart : inputParts) {
@@ -33,7 +32,7 @@ public class FileUploadService {
                 MultivaluedMap<String, String> header =
                         inputPart.getHeaders();
                 fileName = getFileName(header);
-                fileNames.add(fileName);
+                fileName = FileSongService.SONGS_FILE_NAME_JSON;
                 InputStream inputStream = inputPart.getBody(InputStream.class, null);
                 writeFile(inputStream, fileName);
             } catch (Exception e) {
@@ -46,8 +45,7 @@ public class FileUploadService {
     private void writeFile(InputStream inputStream, String fileName) throws IOException {
         byte[] bytes = IOUtils.toByteArray(inputStream);
         File customDir = new File(UPLOAD_DIR);
-        fileName = customDir.getAbsolutePath() +
-                File.separator + fileName;
+        fileName = customDir.getAbsolutePath() + File.separator + fileName;
         Files.write(Paths.get(fileName), bytes,
                 StandardOpenOption.CREATE_NEW);
     }
