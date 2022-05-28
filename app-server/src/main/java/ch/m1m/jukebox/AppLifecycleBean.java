@@ -4,7 +4,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
-import ch.m1m.jukebox.model.db.Song;
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
 import org.jboss.logging.Logger;
@@ -13,7 +12,7 @@ import org.jboss.logging.Logger;
 public class AppLifecycleBean {
 
     @Inject
-    SongService songService;
+    DbSongService dbSongService;
 
     private static final Logger LOG = Logger.getLogger("ListenerBean");
 

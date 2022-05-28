@@ -1,9 +1,8 @@
-CREATE TABLE IF NOT EXISTS `song` (
+CREATE TABLE IF NOT EXISTS song (
+    id VARCHAR(32) PRIMARY KEY,
+    interpret VARCHAR(64),
+    title VARCHAR(64)
 
-    `id` varchar(32) PRIMARY KEY,
-    `interpret` varchar(64),
-    `title` varchar(64)
-
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+) DEFAULT CHARSET=UTF8;
 
 INSERT INTO song(id, interpret, title) VALUES('1', 'sandy', 'I can do')

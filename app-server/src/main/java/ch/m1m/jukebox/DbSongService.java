@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
-public class SongService {
+public class DbSongService {
 
-    private static final Logger LOG = Logger.getLogger(SongService.class);
+    private static final Logger LOG = Logger.getLogger(DbSongService.class);
 
     @Inject
     AgroalDataSource defaultDataSource;
@@ -58,9 +58,9 @@ public class SongService {
         List<Song> songList = new ArrayList<Song>();
 
         try {
-            Connection con = defaultDataSource.getConnection();
+            Connection conn = defaultDataSource.getConnection();
 
-            PreparedStatement stmt = con.prepareStatement("SELECT id, interpret, title FROM song");
+            PreparedStatement stmt = conn.prepareStatement("SELECT id, interpret, title FROM song");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Song song = new Song(rs.getString(1),
