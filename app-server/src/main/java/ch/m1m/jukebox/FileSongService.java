@@ -5,10 +5,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import io.agroal.api.AgroalDataSource;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
@@ -31,6 +33,9 @@ import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 public class FileSongService {
 
     public static String SONGS_FILE_NAME_JSON = "songs.json";
+
+    @ConfigProperty(name = "jukebox.upload.directory")
+    String UPLOAD_DIR;
 
     private static final Logger LOG = Logger.getLogger(FileSongService.class);
 
@@ -62,7 +67,8 @@ public class FileSongService {
 
     private List<Song> readAllFrom() throws IOException {
         Gson gson = new Gson();
-        Reader reader = Files.newBufferedReader(Paths.get("/tmp/" + SONGS_FILE_NAME_JSON));
+        String filePath = UPLOAD_DIR + File.separator + SONGS_FILE_NAME_JSON;
+        Reader reader = Files.newBufferedReader(Paths.get(filePath));
 
         List<Song> songList = new Gson().fromJson(reader, new TypeToken<List<Song>>() {}.getType());
         reader.close();

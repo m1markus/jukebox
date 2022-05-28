@@ -292,6 +292,13 @@
         },
       },
       methods: {
+        loadPlaylistFromServer: function() {
+          console.log('try to load playlist')
+          fetch('/api/v1/song')
+            .then(response => response.json())
+            .then(data => this.playlist.items = data);
+        },
+
         initYtPlayer: function (event) {
           console.log('initYtPlayer() called')
 
@@ -348,6 +355,7 @@
       mounted: function () {
         console.log('vuejs app mounted')
         this.initYtPlayer()
+        this.loadPlaylistFromServer()
       },
       vuetify: new Vuetify({
         theme: {

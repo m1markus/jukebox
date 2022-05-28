@@ -2,6 +2,7 @@ package ch.m1m.jukebox;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.jboss.logging.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
@@ -13,17 +14,22 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Singleton
 public class FileUploadService {
 
-    //@ConfigProperty(name = "upload.directory")
-    String UPLOAD_DIR = "/tmp";
+    private static final Logger LOG = Logger.getLogger("FileUploadService");
+
+    @ConfigProperty(name = "jukebox.upload.directory")
+    String UPLOAD_DIR;
+
+    public FileUploadService() {
+    }
 
     public String uploadFile(MultipartFormDataInput input) {
+        LOG.info("uploadFile() upload directory is: " + UPLOAD_DIR);
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
         List<InputPart> inputParts = uploadForm.get("file");
         String fileName = null;
