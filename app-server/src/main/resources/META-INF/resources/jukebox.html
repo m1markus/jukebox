@@ -86,7 +86,7 @@
                     <v-list-item-group
                             active-class="blue--text"
                     >
-                        <template v-for="(item, index) in playlist.items">
+                        <template v-for="(item, index) in playlist.songList">
                             <v-list-item :key="item.message" @click="onSelectSong(item)">
                                 <template v-slot:default="{ active }">
                                     <v-list-item-content>
@@ -107,7 +107,7 @@
                             </v-list-item>
 
                             <v-divider
-                                    v-if="index < playlist.items.length - 1"
+                                    v-if="index < playlist.songList.length - 1"
                                     :key="index"
                             ></v-divider>
                         </template>
@@ -176,10 +176,7 @@
         pageTitle: 'JukeBOX',
         appVersion: '0.0.32',
         playlist: {
-          items: [
-
-            { title: 'Young Right Now', interpret: 'Robin Schulz & Dennis Lloyd', id: '5jxjUpZr61k' },
-            { title: 'The Motto', interpret: 'Tiësto & Ava Max', id: '1_4ELAxKrDc' },
+          songList: [
 
             { title: 'Bad Habits', interpret: 'Ed Sheeran', id: 'orJSJGHjBLI' },
 
@@ -296,7 +293,7 @@
           console.log('try to load playlist')
           fetch('/api/v1/song')
             .then(response => response.json())
-            .then(data => this.playlist.items = data);
+            .then(data => this.playlist = data);
         },
 
         initYtPlayer: function (event) {

@@ -1,15 +1,13 @@
 package ch.m1m.jukebox;
 
+import ch.m1m.jukebox.model.db.Playlist;
 import ch.m1m.jukebox.model.db.Song;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import io.agroal.api.AgroalDataSource;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
@@ -18,10 +16,6 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -32,18 +26,18 @@ import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 @ApplicationScoped
 public class FileSongService {
 
-    public static String SONGS_FILE_NAME_JSON = "songs.json";
+    public static String SONGS_FILE_NAME_JSON = "playList.json";
 
     @ConfigProperty(name = "jukebox.upload.directory")
     String UPLOAD_DIR;
 
     private static final Logger LOG = Logger.getLogger(FileSongService.class);
 
-    public List<Song> getAll() throws IOException {
+    public Playlist getAll() throws IOException {
         LOG.info("called getSongList()");
-        List<Song> songList = readAllFrom();
-        LOG.info("return song list: " + songList.toString());
-        return songList;
+        Playlist playlist = readPlaylistFromFile();
+        LOG.info("return song list: " + playlist.toString());
+        return playlist;
     }
 
     public void insert(Song song) {
@@ -65,15 +59,17 @@ public class FileSongService {
         return songList;
     }
 
-    private List<Song> readAllFrom() throws IOException {
-        Gson gson = new Gson();
+    private Playlist readPlaylistFromFile() throws IOException {
         String filePath = UPLOAD_DIR + File.separator + SONGS_FILE_NAME_JSON;
         Reader reader = Files.newBufferedReader(Paths.get(filePath));
-
-        List<Song> songList = new Gson().fromJson(reader, new TypeToken<List<Song>>() {}.getType());
+        //
+        // read array from file ...
+        // List<Song> songList = new Gson().fromJson(reader, new TypeToken<List<Song>>() {}.getType());
+        //
+        Playlist playlist = new Gson().fromJson(reader, Playlist.class);
         reader.close();
 
-        return songList;
+        return playlist;
     }
 
     private void createSymbolicLink() throws IOException {
